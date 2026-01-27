@@ -1,0 +1,38 @@
+# Agent Workspace 配置文件
+# 定義你的 agents 和它們的職責
+
+agents:
+  commander:
+    role: "指揮官"
+    description: "主控 agent，負責協調其他 agents"
+    skills:
+      - coordination
+      - task-distribution
+      - monitoring
+
+  agent-1:
+    role: "開發者"
+    description: "專注於實作功能"
+    skills:
+      - feature-dev
+      - tdd
+      - code-review
+
+  agent-2:
+    role: "研究員"
+    description: "負責調研和資訊收集"
+    skills:
+      - research
+      - documentation
+      - testing
+
+workflows:
+  parallel-dev:
+    description: "並行開發流程"
+    steps:
+      - agent: commander
+        action: "分析需求並分配任務"
+      - agent: agent-1
+        action: "實作核心功能"
+      - agent: agent-2
+        action: "撰寫測試和文檔"
