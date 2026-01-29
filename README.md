@@ -133,6 +133,111 @@ just list-agents
 just cleanup
 ```
 
+---
+
+## 🤖 AI Agent API (適合 Claude Code 和其他 AI Agents)
+
+**重要！** 如果你是 AI Agent（如 Claude Code），使用 `agent-api` 命令可以更容易地自動化 agent 控制流程。
+
+### 為什麼需要 agent-api？
+
+- ✅ **AI-friendly interface** - 清晰的命令結構和錯誤處理
+- ✅ **程式化控制** - 適合自動化腳本和 AI 決策
+- ✅ **可靠的反饋** - 明確的 exit codes 和錯誤訊息
+- ✅ **狀態檢查** - 驗證 agents 是否成功創建
+
+### agent-api 命令
+
+```bash
+# 初始化 workspace
+agent-api init
+
+# 列出所有 agents
+agent-api list
+
+# 啟動新 agent
+agent-api spawn researcher
+
+# 發送命令到 agent
+agent-api send agent-1 "pwd"
+
+# 檢查 agent 狀態
+agent-api status agent-1
+
+# 🚀 並行啟動多個 agents
+agent-api parallel-spawn agent-2,agent-3,agent-4
+
+# 🚀 並行發送命令到多個 agents
+agent-api parallel-send agent-1,agent-2,agent-3 "echo 'Hello everyone'"
+
+# 查看幫助
+agent-api help
+```
+
+### AI Agent 使用範例
+
+**範例 1: Claude Code 自動創建協作 agents**
+
+```bash
+# Claude Code 可以執行：
+agent-api init                          # 初始化
+agent-api spawn researcher              # 創建研究員
+agent-api spawn developer               # 創建開發者
+agent-api send researcher "research X"  # 分配任務
+agent-api send developer "implement X"  # 分配任務
+```
+
+**範例 2: 並行執行 - 高效多 Agent 協作** 🚀
+
+```bash
+# 一次創建整個團隊（比逐個創建快 3-5 倍！）
+agent-api parallel-spawn agent-2,agent-3,agent-4,agent-5
+# 輸出：🔄 [1/4] Spawning 'agent-2'...
+#       🔄 [2/4] Spawning 'agent-3'...
+#       🔄 [3/4] Spawning 'agent-4'...
+#       🔄 [4/4] Spawning 'agent-5'...
+#       ✅ Parallel spawn complete (4 agents created)
+
+# 同時向所有 agents 發送相同的初始指令
+agent-api parallel-send agent-1,agent-2,agent-3 "pwd && ls -la"
+# 所有 agents 幾乎同時收到並執行命令！
+
+# 分配並行任務
+agent-api parallel-send agent-1,agent-2 "run-tests"
+agent-api parallel-send agent-3,agent-4 "review-code"
+# agent-1,2 執行測試；agent-3,4 執行審查 - 同時進行！
+```
+
+**範例 3: 驗證和錯誤處理**
+
+```bash
+# AI 可以檢查執行結果
+if agent-api send agent-1 "test command"; then
+    echo "Command sent successfully"
+else
+    echo "Failed to send command"
+fi
+
+# 檢查 agent 是否存在
+agent-api status agent-2
+# Exit code 0 = agent exists
+# Exit code 1 = agent not found
+```
+
+### just vs agent-api
+
+| 特性 | just | agent-api |
+|------|------|-----------|
+| **目標使用者** | 人類 | AI Agents |
+| **輸出格式** | 友善訊息 + emoji | 結構化訊息 |
+| **錯誤處理** | 說明性 | 明確 exit codes |
+| **互動性** | 可附加 tmux session | 純命令式 |
+| **適用場景** | 手動操作 | 自動化腳本 |
+
+**建議：**
+- 🧑‍💻 **人類使用** → `just` 命令
+- 🤖 **AI 使用** → `agent-api` 命令
+
 ## 💡 使用場景
 
 ### 場景 1: 並行開發
